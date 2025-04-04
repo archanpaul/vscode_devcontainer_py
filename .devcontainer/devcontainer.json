@@ -1,0 +1,50 @@
+{
+	"name": "vscode_devcontainer_py",
+	"build": {
+		"context": "..",
+		"dockerfile": "Dockerfile"
+	},
+	// https://containers.dev/features.
+	"features": {
+		"ghcr.io/devcontainers/features/sshd:1": {},
+		"ghcr.io/iterative/features/nvtop:1": {},
+		"ghcr.io/devcontainers/features/git:1": {},
+		"ghcr.io/devcontainers/features/git-lfs:1": {}
+		// "ghcr.io/devcontainers/features/aws-cli:1": {},
+		// "ghcr.io/devcontainers/features/nvidia-cuda:1": {},
+	},
+	"forwardPorts": [
+		5000,
+		8080,
+		8888
+	],
+	"customizations": {
+		"vscode": {
+			"extensions": [
+				"continue.continue",
+				"github.github-vscode-theme",
+				"ms-python.black-formatter",
+				"ms-python.debugpy",
+				"ms-python.isort",
+				"ms-python.python",
+				"ms-python.vscode-pylance",
+				"ms-toolsai.jupyter",
+				"ms-toolsai.jupyter-keymap",
+				"ms-toolsai.jupyter-renderers",
+				"ms-toolsai.vscode-jupyter-cell-tags",
+				"ms-toolsai.vscode-jupyter-slideshow",
+				"ms-vscode.live-server",
+				"ms-vscode.makefile-tools",
+				"ms-vscode.remote-explorer",
+				"redhat.vscode-yaml",
+			]
+		}
+	},
+	// "postCreateCommand": "python --version",
+	"remoteUser": "root",
+	"workspaceMount": "",
+	"workspaceFolder": "/workspaces/host_workspace",
+	"runArgs": [
+		"--volume=${localWorkspaceFolder}:/workspaces/host_workspace:Z"
+	]
+}

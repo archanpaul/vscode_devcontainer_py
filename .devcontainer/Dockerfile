@@ -1,39 +1,49 @@
-# FROM mcr.microsoft.com/devcontainers/anaconda:1-3
-FROM mcr.microsoft.com/devcontainers/miniconda
+# .devcontainer/Dockerfile
 
-ENV CONDA_PLUGINS_AUTO_ACCEPT_TOS=true
+# Stage 1: use the pre_built image if it exists.
+# docker commit COMMIT_ID py312_devcontainer:latest
+FROM py312_devcontainer:latest as custom
 
-COPY .devcontainer/environment.yml .devcontainer/noop.txt /tmp/conda-tmp/
-# COPY .devcontainer/environment_bioconda.yml .devcontainer/noop.txt /tmp/conda-tmp/
+# Stage 2: use a base Python 3.12 image
+FROM python:3.12-slim-bookworm
 
-SHELL ["/bin/bash","-l", "-c"]
-
-WORKDIR /root/
-
+# Install system dependencies
+# 'build-essential' for compiling native extensions, 'git' for version control,
+# 'curl' for downloading, 'libpq-dev' for PostgreSQL client (if needed), etc.
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install --no-install-recommends ufw openssh-server openssh-client\
-    && apt-get -y install --no-install-recommends vim rsync git git-lfs \
-    && apt-get -y install --no-install-recommends fuse s3fs
-#<bioconda_dep> && apt-get -y install --no-install-recommends libgl-dev default-jre
+    && apt-get -y install --no-install-recommends build-essential git curl sudo \
+    && mkdir -p /etc/sudoers.d/ \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*
 
-RUN conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/main && \
-    conda tos accept --override-channels --channel https://repo.anaconda.com/pkgs/r
-#<bioconda_dep> && conda tos accept --override-channels --channel https://bioconda.github.io/recipes
+# Create a non-root user 'vscode' with sudo access and set it as the default
+ARG USERNAME=vscode
+ARG USER_UID=1000
+ARG USER_GID=1000
+RUN groupadd --gid $USER_GID $USERNAME \
+    && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
+    && usermod -aG sudo $USERNAME \
+    && echo $USERNAME ALL=\(ALL\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+    && chmod 0440 /etc/sudoers.d/$USERNAME
+USER $USERNAME
 
-RUN /opt/conda/bin/conda init bash && \
-    /opt/conda/bin/conda config --add channels default && \
-    #<bioconda_dep> /opt/conda/bin/conda config --add channels bioconda && \
-    /opt/conda/bin/conda config --add channels conda-forge && \
-    /opt/conda/bin/conda update --all -y -n base && \
-    /opt/conda/bin/conda env update -f /tmp/conda-tmp/environment.yml && \
-    #<bioconda_dep> /opt/conda/bin/conda env update -f /tmp/conda-tmp/environment_bioconda.yml && \
-    /opt/conda/bin/conda update --all -y -n venv && \
-    /opt/conda/bin/conda clean -afy
+# Install pipx and Poetry as the 'vscode' user
+ENV PIPX_HOME=/home/vscode/.local/pipx
+ENV PIPX_BIN_DIR=/home/vscode/.local/bin
+ENV PATH="${PATH}:${PIPX_BIN_DIR}"
+RUN pip install --no-cache-dir --user pipx \
+    && python3 -m pipx ensurepath
 
-RUN rm -rf /tmp/conda-tmp
+# Install Poetry using pipx
+RUN pipx install poetry==1.8.2 # Specify a version for consistency
 
+# Set the working directory
+WORKDIR /workspaces/vscode_devcontainer_py.git
 
-ENV PATH /opt/conda/bin:$PATH
+# Copy project dependency files and install them
+# This is done before copying the rest of the code to leverage Docker layer caching.
+# The layer will only be rebuilt if these files change.
+COPY --chown=vscode:vscode ../pyproject.toml ./
+# COPY --chown=vscode:vscode ../poetry.lock ./
+RUN poetry install --no-root
 
-RUN echo "conda activate venv" >> ~/.bashrc
 ENTRYPOINT ["bash", "-l", "-c"]

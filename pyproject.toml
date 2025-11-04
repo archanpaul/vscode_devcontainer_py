@@ -1,0 +1,43 @@
+# pyproject.toml
+[tool.poetry]
+name = "pyproject"
+version = "0.1.0"
+description = "A Python project configured for VS Code Dev Containers."
+authors = ["decontainer_dev"]
+license = "GPL-3.0-or-later"
+
+[tool.poetry.dependencies]
+python = ">=3.12,<3.13"
+# Core dependencies
+requests = "*"
+
+[tool.poetry.group.web.dependencies]
+fastapi = "*"
+flask = "*"
+jinja2 = "*"
+sqlmodel = "*"
+uvicorn = {extras = ["standard"], version = "*"}
+
+[tool.poetry.group.ml.dependencies]
+adjusttext = "*"
+ipykernel = "*"
+ipywidgets = "*"
+jupyter = "*"
+keras = "*"
+matplotlib = "*"
+numpy = "*"
+pandas = "*"
+torch = "*"
+scikit-learn = "*"
+seaborn = "*"
+streamlit = "*"
+tensorflow = "*"
+torchvision = "*"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "*"
+black = "*"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

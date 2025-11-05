@@ -45,17 +45,17 @@ The build process is as follows:
 1.  **Stage 1: Local Cache (`custom`)**
     ```dockerfile
     # Stage 1: use the pre_built image if it exists.
-    # docker commit COMMIT_ID py312_devcontainer:latest
-    FROM py312_devcontainer:latest as custom
+    # docker commit COMMIT_ID ml_devcontainer:latest
+    FROM ml_devcontainer:latest as custom
     ```
-    This first stage attempts to use a locally cached Docker image named `py312_devcontainer:latest`. This allows subsequent builds to start from a pre-built state, saving significant time.
+    This first stage attempts to use a locally cached Docker image named `ml_devcontainer:latest`. This allows subsequent builds to start from a pre-built state, saving significant time.
 
 2.  **Stage 2: Base Image**
     ```dockerfile
     # Stage 2: use a base Python 3.12 image
     FROM python:3.12-slim-bookworm
     ```
-    If the `py312_devcontainer:latest` image is not found, the build gracefully falls back to using the official `python:3.12-slim-bookworm` image as its starting point. This ensures the container can always be built from scratch.
+    If the `ml_devcontainer:latest` image is not found, the build gracefully falls back to using the official `python:3.12-slim-bookworm` image as its starting point. This ensures the container can always be built from scratch.
 
 ### How to Create the Local Cache
 
@@ -64,7 +64,7 @@ After you have built the container and are satisfied with its state (e.g., after
 1.  Find the `CONTAINER ID` of your running dev container.
 2.  Commit the container to create a new image:
     ```bash
-    docker commit <CONTAINER_ID> py312_devcontainer:latest
+    docker commit <CONTAINER_ID> ml_devcontainer:latest
     ```
 The next time you rebuild the container, Docker will use this cached image, speeding up the process.
 
@@ -138,11 +138,11 @@ The `.devcontainer/devcontainer.json` file configures the VS Code editor inside 
 ## How to save devcontainer image
 
 - Find the container: `podman ps -a`
-- Commit the container to an image: `podman commit <container_id_or_name> py312_devcontainer:latest`
+- Commit the container to an image: `podman commit <container_id_or_name> ml_devcontainer:latest`
 - Verify the image: `podman images`
-- Run a new container from the image: `podman run -it py312_devcontainer:latest /bin/bash`
-- Save image for future use: `podman save -o py312_devcontainer_DATE.tar py312_devcontainer:latest`
-- Reload container from saved image: `podman load -i py312_devcontainer_DATE.tar`
+- Run a new container from the image: `podman run -it ml_devcontainer:latest /bin/bash`
+- Save image for future use: `podman save -o ml_devcontainer_DATE.tar ml_devcontainer:latest`
+- Reload container from saved image: `podman load -i ml_devcontainer_DATE.tar`
 
 ## Example uses-cases
 

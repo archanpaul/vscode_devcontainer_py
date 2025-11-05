@@ -1,6 +1,6 @@
 # pyproject.toml
 [tool.poetry]
-name = "pyproject"
+name = "ml_devcontainer"
 version = "0.1.0"
 description = "A Python project configured for VS Code Dev Containers."
 authors = ["decontainer_dev"]
@@ -10,6 +10,7 @@ license = "GPL-3.0-or-later"
 python = ">=3.12,<3.13"
 # Core dependencies
 requests = "*"
+tf-keras = "^2.20.1"
 
 [tool.poetry.group.web.dependencies]
 fastapi = "*"
@@ -19,24 +20,28 @@ sqlmodel = "*"
 uvicorn = {extras = ["standard"], version = "*"}
 
 [tool.poetry.group.ml.dependencies]
-adjusttext = "*"
-ipykernel = "*"
-ipywidgets = "*"
-jupyter = "*"
 keras = "*"
 matplotlib = "*"
 numpy = "*"
 pandas = "*"
-torch = "*"
 scikit-learn = "*"
+scipy = "*"
 seaborn = "*"
 streamlit = "*"
 tensorflow = "*"
+tf-keras = "*"
+torch = "*"
+torchaudio = "*"
+torchdata = "*"
 torchvision = "*"
+transformers = "*"
 
 [tool.poetry.group.dev.dependencies]
-pytest = "*"
 black = "*"
+ipykernel = "*"
+ipywidgets = "*"
+jupyter = "*"
+pytest = "*"
 
 [build-system]
 requires = ["poetry-core"]

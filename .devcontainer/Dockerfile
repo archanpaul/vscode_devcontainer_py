@@ -1,8 +1,8 @@
 # .devcontainer/Dockerfile
 
 # Stage 1: use the pre_built image if it exists.
-# docker commit COMMIT_ID py312_devcontainer:latest
-FROM py312_devcontainer:latest as custom
+# docker commit COMMIT_ID ml_devcontainer:latest
+FROM ml_devcontainer:latest as custom
 
 # Stage 2: use a base Python 3.12 image
 FROM python:3.12-slim-bookworm
@@ -11,9 +11,15 @@ FROM python:3.12-slim-bookworm
 # 'build-essential' for compiling native extensions, 'git' for version control,
 # 'curl' for downloading, 'libpq-dev' for PostgreSQL client (if needed), etc.
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-    && apt-get -y install --no-install-recommends build-essential git curl sudo \
+    && apt-get -y install --no-install-recommends build-essential git curl sudo openssh-client openssh-server \
     && mkdir -p /etc/sudoers.d/ \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
+
+# Configure SSH server
+RUN mkdir -p /var/run/sshd \
+    && echo 'root:root' | chpasswd \
+    && sed -i 's/#PermitRootLogin prohibit-password/PermitRootLogin yes/' /etc/ssh/sshd_config \
+    && sed -i 's@session\\s*required\\s*pam_loginuid.so@session optional pam_loginuid.so@g' /etc/pam.d/sshd
 
 # Create a non-root user 'vscode' with sudo access and set it as the default
 ARG USERNAME=vscode
@@ -22,7 +28,7 @@ ARG USER_GID=1000
 RUN groupadd --gid $USER_GID $USERNAME \
     && useradd -s /bin/bash --uid $USER_UID --gid $USER_GID -m $USERNAME \
     && usermod -aG sudo $USERNAME \
-    && echo $USERNAME ALL=\(ALL\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+    && echo '$USERNAME ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
 USER $USERNAME
 
@@ -34,7 +40,7 @@ RUN pip install --no-cache-dir --user pipx \
     && python3 -m pipx ensurepath
 
 # Install Poetry using pipx
-RUN pipx install poetry==1.8.2 # Specify a version for consistency
+RUN pipx install poetry
 
 # Set the working directory
 WORKDIR /workspaces/vscode_devcontainer_py.git
@@ -46,4 +52,11 @@ COPY --chown=vscode:vscode ../pyproject.toml ./
 # COPY --chown=vscode:vscode ../poetry.lock ./
 RUN poetry install --no-root
 
+# Install Ollama
+RUN curl -fsSL https://ollama.com/download/OllamaInstall.sh | sh
+
+# Force all commands through a login shell
 ENTRYPOINT ["bash", "-l", "-c"]
+
+# Default command if none is provided
+CMD ["bash"]

@@ -2,7 +2,7 @@
 
 # Stage 1: use the pre_built image if it exists.
 # docker commit COMMIT_ID ml_devcontainer:latest
-FROM ml_devcontainer:latest as custom
+FROM localhost/ml_devcontainer:latest as custom
 
 # Stage 2: use a base Python 3.12 image
 FROM python:3.12-slim-bookworm
@@ -49,7 +49,7 @@ WORKDIR /workspaces/vscode_devcontainer_py.git
 # This is done before copying the rest of the code to leverage Docker layer caching.
 # The layer will only be rebuilt if these files change.
 COPY --chown=vscode:vscode ../pyproject.toml ./
-# COPY --chown=vscode:vscode ../poetry.lock ./
+COPY --chown=vscode:vscode ../poetry.lock ./
 RUN poetry install --no-root
 
 # Install Ollama

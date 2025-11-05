@@ -5163,7 +5163,7 @@ version = "2.20.1"
 description = "Deep learning for humans."
 optional = false
 python-versions = ">=3.9"
-groups = ["main"]
+groups = ["main", "ml"]
 files = [
     {file = "tf_keras-2.20.1-py3-none-any.whl", hash = "sha256:3f0e0a34d9a4c8758f24fdc1053e6e335f16ab5534c7d34f1899b8924779760c"},
     {file = "tf_keras-2.20.1.tar.gz", hash = "sha256:884be5938fb0b2b53b1583c1ae2b660ef87215377c29b5b6a77fd221b472aeaf"},
@@ -6214,4 +6214,4 @@ dev = ["pytest", "setuptools"]
 [metadata]
 lock-version = "2.1"
 python-versions = ">=3.12,<3.13"
-content-hash = "dd5e84e67d3220101ff920a1ad8e364965cb494f55eaf523fc82ff56755caaa6"
+content-hash = "c4d069d56a34bae54e425647c27b7bc42f61e892216c9faec637eaf7b3265d0a"

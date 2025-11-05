@@ -135,13 +135,13 @@ The `.devcontainer/devcontainer.json` file configures the VS Code editor inside 
 -   **Formatter**: Black is set as the default formatter for Python files, and it will format on save.
 -   **Extensions**: A list of recommended extensions for Python development, including Pylance, Jupyter, and Black Formatter, are automatically installed.
 
-## How to save devcontainer image
+## How to save devcontainer image (podman)
 
 - Find the container: `podman ps -a`
 - Commit the container to an image: `podman commit <container_id_or_name> ml_devcontainer:latest`
 - Verify the image: `podman images`
 - Run a new container from the image: `podman run -it ml_devcontainer:latest /bin/bash`
-- Save image for future use: `podman save -o ml_devcontainer_DATE.tar ml_devcontainer:latest`
+- Save image for future use: `podman save -o ml_devcontainer_$(date +%Y%m%d).tar ml_devcontainer:latest`
 - Reload container from saved image: `podman load -i ml_devcontainer_DATE.tar`
 
 ## Example uses-cases

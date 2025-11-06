@@ -10,7 +10,6 @@ license = "GPL-3.0-or-later"
 python = ">=3.12,<3.13"
 # Core dependencies
 requests = "*"
-tf-keras = "^2.20.1"
 
 [tool.poetry.group.web.dependencies]
 fastapi = "*"

@@ -50,7 +50,7 @@ WORKDIR /workspaces/vscode_devcontainer_py.git
 # This is done before copying the rest of the code to leverage Docker layer caching.
 # The layer will only be rebuilt if these files change.
 COPY --chown=vscode:vscode ../pyproject.toml ./
-COPY --chown=vscode:vscode ../poetry.lock ./
+# COPY --chown=vscode:vscode ../poetry.lock ./
 RUN poetry install --no-root
 
 # Install Ollama

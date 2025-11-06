@@ -9,7 +9,7 @@ This repository provides a template for a Python development environment using V
 -   **Dependency Management**:
     -   Uses Poetry for robust dependency management.
     -   Dependencies are organized into logical groups (`core`, `web`, `ml`, `dev`).
-    -   The virtual environment is automatically created inside the project folder at `.venv/` for better project isolation.
+    -   Dependencies are installed system-wide within the container, simplifying the environment.
 -   **VS Code Integration**:
     -   Pre-configured `devcontainer.json` for a seamless experience.
     -   A curated list of essential extensions for Python, Jupyter, and AI-assisted development is installed automatically.
@@ -72,7 +72,7 @@ The next time you rebuild the container, Docker will use this cached image, spee
 
 This project uses Poetry for dependency management.
 
-By default, Poetry creates virtual environments in a central directory (e.g., `~/.cache/pypoetry/virtualenvs`). However, this project is configured via the `.devcontainer/devcontainer.json` file to create the virtual environment within the project directory at `.venv/`. This is achieved by setting the `POETRY_VIRTUALENVS_IN_PROJECT` environment variable to `true`, ensuring the environment is self-contained within the project.
+This project is configured via `.devcontainer/devcontainer.json` to create virtual environments in a centralized location at `/usr/local/virtualenvs`. This is achieved by setting `POETRY_VIRTUALENVS_CREATE` to `true` and configuring `POETRY_VIRTUALENVS_PATH`. This keeps your project directory clean while still isolating dependencies.
 
 ### `pyproject.toml` and `poetry.lock`
 
@@ -124,8 +124,8 @@ poetry add --group dev <package-name>
 -   **`poetry update`**: Updates the dependencies to their latest compatible versions and updates `poetry.lock`.
 -   **`poetry add <package>`**: Adds a new dependency to `pyproject.toml` and installs it.
 -   **`poetry remove <package>`**: Removes a dependency from `pyproject.toml` and uninstalls it.
--   **`poetry run <command>`**: Executes a command within the project's virtual environment. For example, `poetry run pytest` to run tests.
--   **`poetry shell`**: Spawns a new shell within the project's virtual environment, allowing you to run commands directly without `poetry run`.
+-   **`poetry run <command>`**: Executes a command within the project's virtual environment. For example, `poetry run pytest`.
+-   **`poetry shell`**: Activates the project's virtual environment, allowing you to run commands directly.
 
 ## VS Code Configuration
 
@@ -144,6 +144,19 @@ The `.devcontainer/devcontainer.json` file configures the VS Code editor inside 
 - Run a new container in daemon mode: `podman run -d --name ml_devcontainer ml_devcontainer:latest /bin/bash`
 - Save image for future use: `podman save -o ml_devcontainer_$(date +%Y%m%d).tar ml_devcontainer:latest`
 - Reload container from saved image: `podman load -i ml_devcontainer_DATE.tar`
+
+## Reuse existing container in a project
+
+- Create .devcontainer folder in project root and copy `devcontainer.json` to it.
+- Comment the `build` block and uncomment `image` block.
+
+    ```
+        "build": {
+            "dockerfile": "Dockerfile",
+            "context": ".."
+        },
+        // "image": "localhost/ml_devcontainer:latest",
+    ```
 
 ## Example uses-cases
 

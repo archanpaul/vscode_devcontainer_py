@@ -141,6 +141,7 @@ The `.devcontainer/devcontainer.json` file configures the VS Code editor inside 
 - Commit the container to an image: `podman commit <container_id_or_name> ml_devcontainer:latest`
 - Verify the image: `podman images`
 - Run a new container from the image: `podman run -it ml_devcontainer:latest /bin/bash`
+- Run a new container in daemon mode: `podman run -d --name ml_devcontainer ml_devcontainer:latest /bin/bash`
 - Save image for future use: `podman save -o ml_devcontainer_$(date +%Y%m%d).tar ml_devcontainer:latest`
 - Reload container from saved image: `podman load -i ml_devcontainer_DATE.tar`
 

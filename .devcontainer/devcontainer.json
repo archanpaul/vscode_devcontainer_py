@@ -43,7 +43,9 @@
         "POETRY_VIRTUALENVS_CREATE": "true",
         "POETRY_NO_INTERACTION": "1"
     },
-    "features": {},
+    "features": {
+        "ghcr.io/devcontainers/features/common-utils:2": {}
+    },
     "forwardPorts": [
         22,
         8080,

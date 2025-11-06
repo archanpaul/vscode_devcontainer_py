@@ -30,6 +30,7 @@ RUN groupadd --gid $USER_GID $USERNAME \
     && usermod -aG sudo $USERNAME \
     && echo '$USERNAME ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/$USERNAME \
     && chmod 0440 /etc/sudoers.d/$USERNAME
+
 USER $USERNAME
 
 # Install pipx and Poetry as the 'vscode' user

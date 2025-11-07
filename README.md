@@ -142,6 +142,8 @@ The `.devcontainer/devcontainer.json` file configures the VS Code editor inside 
 - Verify the image: `podman images`
 - Run a new container from the image: `podman run -it ml_devcontainer:latest /bin/bash`
 - Run a new container in daemon mode: `podman run -d --name ml_devcontainer ml_devcontainer:latest /bin/bash`
+- Cleanup existing vscode server extensions: `podman exec -it --user root ml_devcontainer rm -rf /home/vscode/.vscode-server/bin/*`
+- Commit the the changes: `podman commit <container_id_or_name> ml_devcontainer:latest`
 - Save image for future use: `podman save -o ml_devcontainer_$(date +%Y%m%d).tar ml_devcontainer:latest`
 - Reload container from saved image: `podman load -i ml_devcontainer_DATE.tar`
 
@@ -151,18 +153,17 @@ The `.devcontainer/devcontainer.json` file configures the VS Code editor inside 
 - Comment the `build` block and uncomment `image` block.
 
     ```
-        "build": {
-            "dockerfile": "Dockerfile",
-            "context": ".."
-        },
-        // "image": "localhost/ml_devcontainer:latest",
+        // "build": {
+        //     "dockerfile": "Dockerfile",
+        //     "context": ".."
+        // },
+        "image": "localhost/ml_devcontainer:latest",
     ```
 
 ## Example uses-cases
 
 - FastAPI with Uvicorn: `poetry run python -m uvicorn main:app --host 0.0.0.0 --port 8080 --reload
 `
-
 - Streamlit app: `poetry run streamlit run app.py --server.port 8080 --server.address 0.0.0.0
 `
 

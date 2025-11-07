@@ -5,6 +5,7 @@
         "dockerfile": "Dockerfile",
         "context": ".."
     },
+    // "image": "localhost/ml_devcontainer:latest",
     "customizations": {
         "vscode": {
             "settings": {

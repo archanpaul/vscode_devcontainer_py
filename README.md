@@ -145,7 +145,6 @@ The `.devcontainer/devcontainer.json` file configures the VS Code editor inside 
 - Cleanup existing vscode server extensions: `podman exec -it --user root ml_devcontainer rm -rf /home/vscode/.vscode-server/bin/*`
 - Commit the the changes: `podman commit <container_id_or_name> ml_devcontainer:latest`
 - Save image for future use: `podman save -o ml_devcontainer_$(date +%Y%m%d).tar ml_devcontainer:latest`
-- Reload container from saved image: `podman load -i ml_devcontainer_DATE.tar`
 
 ## Reuse existing container in a project
 
@@ -158,7 +157,11 @@ The `.devcontainer/devcontainer.json` file configures the VS Code editor inside 
         //     "context": ".."
         // },
         "image": "localhost/ml_devcontainer:latest",
-    ```
+
+- Reload container from saved image: `podman load -i ml_devcontainer_DATE.tar`    ```
+- Run container: `podman run -d --name ml_devcontainer -v $(pwd):/home/vscode/workspace:Z localhost/ml_devcontainer:latest`
+- Access container from terminal: `podman exec -it --user vscode ml_devcontainer bash`
+
 
 ## Example uses-cases
 

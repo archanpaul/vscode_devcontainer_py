@@ -45,8 +45,7 @@ RUN pipx install poetry
 WORKDIR /workspaces/vscode_devcontainer_py.git
 
 # Copy project dependency files and install them
-# COPY --chown=vscode:vscode ../pyproject.toml ../poetry.lock ./
-COPY --chown=vscode:vscode ../pyproject.toml ./
+COPY --chown=vscode:vscode ../pyproject.toml ../poetry.lock ./
 RUN poetry install --no-root --with dev --without web,ml
 
 # Force all commands through a login shell

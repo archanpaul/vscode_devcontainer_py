@@ -18,7 +18,6 @@ sqlmodel = "*"
 uvicorn = {extras = ["standard"], version = "*"}
 
 [tool.poetry.group.ml.dependencies]
-keras = "*"
 matplotlib = "*"
 numpy = "*"
 pandas = "*"
@@ -26,8 +25,6 @@ scikit-learn = "*"
 scipy = "*"
 seaborn = "*"
 streamlit = "*"
-tensorflow = "*"
-tf-keras = "*"
 torch = "*"
 torchaudio = "*"
 torchdata = "*"

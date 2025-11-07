@@ -42,7 +42,7 @@ RUN pip install --no-cache-dir --user pipx \
 RUN pipx install poetry
 
 # Set the working directory
-WORKDIR /workspaces/vscode_devcontainer_py.git
+WORKDIR /workspaces
 
 # Copy project dependency files and install them
 COPY --chown=vscode:vscode ../pyproject.toml ../poetry.lock ./

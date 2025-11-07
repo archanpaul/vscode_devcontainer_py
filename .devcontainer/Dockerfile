@@ -35,6 +35,7 @@ USER $USERNAME
 ENV PIPX_HOME=/home/vscode/.local/pipx
 ENV PIPX_BIN_DIR=/home/vscode/.local/bin
 ENV PATH="${PATH}:${PIPX_BIN_DIR}"
+RUN pip install --upgrade pip
 RUN pip install --no-cache-dir --user pipx \
     && python3 -m pipx ensurepath
 
@@ -42,11 +43,11 @@ RUN pip install --no-cache-dir --user pipx \
 RUN pipx install poetry
 
 # Set the working directory
-WORKDIR /workspaces
+WORKDIR /home/$USERNAME
 
 # Copy project dependency files and install them
 COPY --chown=vscode:vscode ../pyproject.toml ../poetry.lock ./
-RUN poetry install --no-root --with dev --without web,ml
+RUN poetry install --no-root --with dev,web,ml
 
 # Force all commands through a login shell
 ENTRYPOINT ["bash", "-l", "-c"]

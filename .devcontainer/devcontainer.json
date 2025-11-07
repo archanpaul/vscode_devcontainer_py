@@ -37,7 +37,7 @@
         }
     },
     "remoteUser": "vscode",
-    "postCreateCommand": "pip install --upgrade pip && poetry install --no-root --with dev,web,ml",
+    "postCreateCommand": "poetry update",
     "containerEnv": {
         "POETRY_VIRTUALENVS_IN_PROJECT": "false",
         "POETRY_VIRTUALENVS_CREATE": "true",

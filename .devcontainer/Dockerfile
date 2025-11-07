@@ -8,8 +8,6 @@ FROM localhost/ml_devcontainer:latest as custom
 FROM python:3.12-slim-bookworm
 
 # Install system dependencies
-# 'build-essential' for compiling native extensions, 'git' for version control,
-# 'curl' for downloading, 'libpq-dev' for PostgreSQL client (if needed), etc.
 RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get -y install --no-install-recommends build-essential git curl sudo openssh-client openssh-server \
     && mkdir -p /etc/sudoers.d/ \
@@ -47,14 +45,9 @@ RUN pipx install poetry
 WORKDIR /workspaces/vscode_devcontainer_py.git
 
 # Copy project dependency files and install them
-# This is done before copying the rest of the code to leverage Docker layer caching.
-# The layer will only be rebuilt if these files change.
+# COPY --chown=vscode:vscode ../pyproject.toml ../poetry.lock ./
 COPY --chown=vscode:vscode ../pyproject.toml ./
-# COPY --chown=vscode:vscode ../poetry.lock ./
-RUN poetry install --no-root
-
-# Install Ollama
-RUN curl -fsSL https://ollama.com/download/OllamaInstall.sh | sh
+RUN poetry install --no-root --with dev --without web,ml
 
 # Force all commands through a login shell
 ENTRYPOINT ["bash", "-l", "-c"]

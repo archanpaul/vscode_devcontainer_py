@@ -8,13 +8,12 @@ license = "GPL-3.0-or-later"
 
 [tool.poetry.dependencies]
 python = ">=3.12,<3.13"
-# Core dependencies
-requests = "*"
 
 [tool.poetry.group.web.dependencies]
 fastapi = "*"
 flask = "*"
 jinja2 = "*"
+requests = "*"
 sqlmodel = "*"
 uvicorn = {extras = ["standard"], version = "*"}
 
